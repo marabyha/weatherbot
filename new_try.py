@@ -2,6 +2,7 @@ import telebot
 import requests
 import json
 bot = telebot.TeleBot('5823054453:AAG1uqYUD50_yd9B-8fZY2USIKUYjZELNPk')
+bot.set_webhook()
 
 WEATHER_TOKEN = '8d761b50d04c864baf1b95dedf0a42b2'
 
@@ -26,7 +27,7 @@ def parse_weather_data(data):
         weather_state = elem['main']
     temp = round(data['main']['temp'] - 273.15, 2)
     city = data['name']
-    msg = f'The weather in {city}: Temp is {temp}, State is {weather_state}'
+    msg = f'Погода в {city}: температура {temp}, состояние {weather_state}'
     return msg
 
 
@@ -35,7 +36,7 @@ def get_location(message):
     url = WEATHER_URL.format(city=message.text, token=WEATHER_TOKEN)
     response = requests.get(url)
     if response.status_code != 200:
-        answer = 'city not found'
+        answer = 'Город не найден'
     else:
         data = json.loads(response.content)
         answer = parse_weather_data(data)
